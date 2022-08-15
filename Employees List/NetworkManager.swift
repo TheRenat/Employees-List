@@ -16,13 +16,14 @@ enum NetworkError: Error {
 }
 
 class NetworkManager {
+    
     static let shared = NetworkManager()
     
     private init() {}
     
-//    func fetch(from url: String?, completion: @escaping(Result<Data, NetworkError>) -> Void) {
-//        guard let url = URL(string: url ?? "") else {
-//            completion(.failure(.invalidURL))
-//            return
-//        }
+    func fetch(from url: String?, completion: @escaping(Result<Data, NetworkError>) -> Void) {
+        guard let url = URL(string: url ?? "") else {
+            completion(.failure(.invalidURL))
+            return
+        }
 }
