@@ -15,8 +15,9 @@ class EmployeeCell: UITableViewCell {
     func configureCell(with employee: Employees) {
         
         employeeName.text = employee.name
-//        employeePhone.text = employee.phone_number
-//        employeeSkills.text = employee.skills.randomElement()
+        employeePhone.text = employee.phone_number
+        //employeeSkills.text = employee.skills.forEach 
+        }
     }
-}
+
 

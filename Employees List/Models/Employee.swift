@@ -7,16 +7,12 @@
 
 import Foundation
 
-struct Company: Codable {
-    let company: CompanyInfo?
-}
-
-struct CompanyInfo: Codable {
+struct Company {
     let name: String?
     let employees: [Employees]?
 }
 
-struct Employees: Codable {
+struct Employees {
     let name: String?
     let phone_number: String?
     let skills: [String]?

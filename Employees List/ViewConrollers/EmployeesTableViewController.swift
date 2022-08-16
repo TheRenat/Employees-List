@@ -6,33 +6,31 @@
 //
 
 import UIKit
+import Alamofire
 
 class EmployeesTableViewController: UITableViewController {
     
     private var employees: [Employees] = []
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.rowHeight = 100
         fetchEmployees()
-        //print(employees)
+        print(employees)
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return employees.count
     }
-
+    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? EmployeeCell else { return UITableViewCell() }
-
         let employee = employees[indexPath.row]
         cell.configureCell(with: employee)
-
         return cell
     }
 }
@@ -40,34 +38,32 @@ class EmployeesTableViewController: UITableViewController {
 extension EmployeesTableViewController {
     
     private func fetchEmployees() {
-        guard let url = URL(string: link) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let data = data else {
-                print(1)
-                return
+        AF.request(link)
+            .validate()
+            .responseJSON{ [weak self] dataResponse in
+                switch dataResponse.result {
+                case .success(let value):
+                    guard let employeesData = value as? [String: Any] else { return }
+                    print(employeesData)
+                    for (key, _) in employeesData {
+                        let emplo = key["employees"] as? [Any] ?? []
+                        print(emplo)
+                    }
+//                    for employeeData in employeesData {
+//                        let employee = Employees(
+//                            name: employeeData["name"] as? String ?? "",
+//                            phone_number: employeeData["phone_number"] as? String ?? "",
+//                            skills: employeeData["skills"] as? [String] ?? []
+//                        )
+//                        self?.employees.append(employee)
+//                    }
+//                    self?.tableView.reloadData()
+//print(employeesData)
+                    
+                    
+                case .failure(let error):
+                    print(error)
             }
-            do {
-                self.employees = try JSONDecoder().decode([Employees].self, from: data)
-                print(2)
-            } catch let error {
-                print(error)
-            }
-        }.resume()
-//
-//    guard let url = URL(string: link) else { return }
-//
-//         URLSession.shared.dataTask(with: url) { data, response, error in
-//             guard let data = data else {
-//                 print(error?.localizedDescription ?? "No error description")
-//                 return
-//             }
-//             do {
-//                 let employees = try JSONDecoder().decode(Company.self, from: data)
-//                 print(employees)
-//             } catch let error {
-//                 print(error)
-//             }
-//         }.resume()
+    }
 }
 }
