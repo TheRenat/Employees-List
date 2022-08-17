@@ -7,14 +7,18 @@
 
 import Foundation
 
+struct Avito {
+    let company: Company?
+}
+
 struct Company {
-    let name: String?
+    let name: String
     let employees: [Employees]?
 }
 
 struct Employees {
-    let name: String?
-    let phone_number: String?
-    let skills: [String]?
+    let name: String
+    let phone_number: String
+    let skills: [String]
 }
 

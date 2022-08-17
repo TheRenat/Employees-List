@@ -17,7 +17,7 @@ class EmployeesTableViewController: UITableViewController {
         
         tableView.rowHeight = 100
         fetchEmployees()
-        print(employees)
+        
     }
     
     // MARK: - Table view data source
@@ -40,27 +40,14 @@ extension EmployeesTableViewController {
     private func fetchEmployees() {
         AF.request(link)
             .validate()
-            .responseJSON{ [weak self] dataResponse in
+            .responseJSON{ dataResponse in
                 switch dataResponse.result {
                 case .success(let value):
                     guard let employeesData = value as? [String: Any] else { return }
                     print(employeesData)
-                    for (key, _) in employeesData {
-                        let emplo = key["employees"] as? [Any] ?? []
-                        print(emplo)
-                    }
-//                    for employeeData in employeesData {
-//                        let employee = Employees(
-//                            name: employeeData["name"] as? String ?? "",
-//                            phone_number: employeeData["phone_number"] as? String ?? "",
-//                            skills: employeeData["skills"] as? [String] ?? []
-//                        )
-//                        self?.employees.append(employee)
-//                    }
-//                    self?.tableView.reloadData()
-//print(employeesData)
-                    
-                    
+                    let employee = Avito(company: employeesData["company"] as? Company
+                    )
+                    print(employee)
                 case .failure(let error):
                     print(error)
             }
