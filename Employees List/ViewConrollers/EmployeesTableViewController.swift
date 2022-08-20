@@ -17,7 +17,7 @@ class EmployeesTableViewController: UITableViewController {
         
         tableView.rowHeight = 100
         fetchEmployees()
-        
+        view.backgroundColor = .blue
     }
     
     // MARK: - Table view data source
