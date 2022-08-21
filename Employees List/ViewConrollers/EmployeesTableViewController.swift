@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Alamofire
 
 class EmployeesTableViewController: UITableViewController {
     
@@ -17,7 +16,6 @@ class EmployeesTableViewController: UITableViewController {
         
         tableView.rowHeight = 100
         fetchEmployees()
-        view.backgroundColor = .blue
     }
     
     // MARK: - Table view data source
@@ -29,28 +27,32 @@ class EmployeesTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? EmployeeCell else { return UITableViewCell() }
-        let employee = employees[indexPath.row]
-        cell.configureCell(with: employee)
+        cell.employeeName.text = employees[indexPath.row].name
+        cell.employeePhone.text = employees[indexPath.row].phone_number
+        cell.employeeSkills.text = employees[indexPath.row].skills.joined(separator: ", ")
+        
         return cell
     }
-}
-
-extension EmployeesTableViewController {
     
     private func fetchEmployees() {
-        AF.request(link)
-            .validate()
-            .responseJSON{ dataResponse in
-                switch dataResponse.result {
-                case .success(let value):
-                    guard let employeesData = value as? [String: Any] else { return }
-                    print(employeesData)
-                    let employee = Avito(company: employeesData["company"] as? Company
-                    )
-                    print(employee)
-                case .failure(let error):
-                    print(error)
+        guard let url = URL(string: link) else { return }
+        
+        URLSession.shared.dataTask(with: url) { [self] data, _, error in
+            guard let data = data else {
+                print(error?.localizedDescription ?? "No error description")
+                return
             }
+            do {
+                let employeesJson = try JSONDecoder().decode(CompanyName.self, from: data)
+                employees = employeesJson.company.employees
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+                print(employees)
+                
+            } catch {
+                
+            }
+        }.resume()
     }
-}
 }

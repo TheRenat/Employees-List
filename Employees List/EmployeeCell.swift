@@ -16,7 +16,7 @@ class EmployeeCell: UITableViewCell {
         
         employeeName.text = employee.name
         employeePhone.text = employee.phone_number
-        //employeeSkills.text = employee.skills.forEach 
+        employeeSkills.text = employee.skills.joined(separator: ", ")
         }
     }
 
