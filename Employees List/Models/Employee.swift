@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct CompanyName: Decodable {
-    let company: Company
+struct Company: Decodable {
+    let company: CompanyInfo
 }
 
-struct Company: Decodable {
+struct CompanyInfo: Decodable {
     let name: String
     let employees: [Employees]
 }
