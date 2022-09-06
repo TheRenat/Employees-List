@@ -40,3 +40,7 @@ class EmployeesTableViewController: UITableViewController {
         return cell
     }
 }
+
+extension EmployeesTableViewController {
+    
+}
